@@ -42,8 +42,17 @@ A Twitter-like educational app where AI personalities teach through posts and re
 ## **Core Features**
 
 ### **1. Feed & Content Generation**
+- **UI must closely replicate Twitter/X mobile and web design**
 - Posts generated on-demand as user scrolls
 - Posts stored in SQLite after generation
+- **Feed does NOT generate content endlessly**:
+  - Max number of posts per generation batch (configurable in settings)
+  - When user reaches end of feed, a **"Load More" button** appears
+  - Clicking button generates next batch of posts
+- **Backend must handle API request constraints**:
+  - Default: Parallel requests for faster feed generation
+  - Fallback: Sequential requests (one at a time) when parallel fails
+  - Error handling for rate limits and API constraints
 - Adaptive algorithm:
   - Tracks engagement (likes, time spent, interactions)
   - Generates more of what user engages with (e.g., more technical posts)
@@ -84,7 +93,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
 ### **5. User Features**
 - **Bookmark posts** for later review
 - **Search through bookmarked posts**
-- Infinite scroll feed
+- Infinite scroll feed with "Load More" button at bottom
 - **Weekly recap tab**: User-initiated view showing:
   - What they learned that week
   - Most engaged topics
@@ -97,17 +106,19 @@ A Twitter-like educational app where AI personalities teach through posts and re
 - Set initial difficulty level per topic
 - Choose/follow preferred personalities
 - Adjust post length preferences
+- **Set max posts per generation batch** (how many posts load before "Load More" button appears)
 - Language selection (PT-BR or English)
 
 ### **7. UI/UX**
 - **Dark mode only**
+- **Design must closely replicate Twitter/X mobile and web interface**
 - Smooth scrolling feed (Twitter-like)
 - Clear visual hierarchy
 - Brazilian Portuguese and English support
 
 ---
 
-## **Database Schema (SQLite)** SUGGESTION
+## **Database Schema (SQLite)**
 
 ### **Tables:**
 
@@ -162,6 +173,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
 - initial_difficulties (JSON object)
 - followed_personalities (JSON array)
 - post_length_preference
+- max_posts_per_batch (integer)
 - language
 
 **spaced_repetition_schedule**
@@ -173,7 +185,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
 
 ---
 
-## **Project Structure** SUGGESTION
+## **Project Structure**
 
 ```
 /src
@@ -184,6 +196,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
     ProgressBar.jsx
     FeedbackButtons.jsx
     SearchBar.jsx
+    LoadMoreButton.jsx
   /screens
     FeedScreen.jsx
     BookmarksScreen.jsx
@@ -191,7 +204,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
     WeeklyRecapScreen.jsx
   /services
     database.js          # SQLite operations
-    openrouter.js        # LLM API calls
+    openrouter.js        # LLM API calls with parallel/sequential fallback
     spacedRepetition.js  # Spaced repetition algorithm
     feedAlgorithm.js     # Content distribution logic
   /utils
@@ -209,8 +222,18 @@ A Twitter-like educational app where AI personalities teach through posts and re
 1. Calculate topic distribution based on active topics
 2. Check for spaced repetition posts due
 3. Weight topics by engagement score
-4. Generate next post from appropriate personality
-5. Store and display
+4. Generate next batch (up to max_posts_per_batch)
+5. Attempt parallel generation, fallback to sequential on error
+6. Store and display
+7. Show "Load More" button at end
+
+### **API Request Handler:**
+1. Attempt parallel requests for batch generation
+2. On error (rate limit, connection issue):
+   - Log error
+   - Switch to sequential mode
+   - Retry failed requests one at a time
+3. Track which mode is working and prefer it
 
 ### **Spaced Repetition:**
 1. Track concepts user has learned
