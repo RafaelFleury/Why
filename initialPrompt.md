@@ -17,6 +17,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
 - React Native + Expo
 - NativeWind (Tailwind for React Native)
 - React Navigation (screen navigation)
+- **Markdown rendering library** (react-native-markdown-display or similar)
 
 **State Management:**
 - Zustand or Redux Toolkit (TBD)
@@ -33,6 +34,9 @@ A Twitter-like educational app where AI personalities teach through posts and re
 **Languages:**
 - Brazilian Portuguese + English UI
 
+**Type Safety:**
+- **TypeScript** (required for all code)
+
 **Platforms:**
 - Mobile (iOS/Android via Expo Go for dev, APK for production)
 - Web (development preview via `npx expo start --web`)
@@ -43,6 +47,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
 
 ### **1. Feed & Content Generation**
 - **UI must closely replicate Twitter/X mobile and web design**
+- **Posts support markdown formatting** (code blocks, bold, italic, lists, links)
 - Posts generated on-demand as user scrolls
 - Posts stored in SQLite after generation
 - **Feed does NOT generate content endlessly**:
@@ -187,31 +192,36 @@ A Twitter-like educational app where AI personalities teach through posts and re
 
 ## **Project Structure**
 
+**Note:** All files must use TypeScript (.tsx/.ts extensions)
+
 ```
 /src
   /components
-    Post.jsx
-    Reply.jsx
-    PersonalityAvatar.jsx
-    ProgressBar.jsx
-    FeedbackButtons.jsx
-    SearchBar.jsx
-    LoadMoreButton.jsx
+    Post.tsx
+    Reply.tsx
+    PersonalityAvatar.tsx
+    ProgressBar.tsx
+    FeedbackButtons.tsx
+    SearchBar.tsx
+    LoadMoreButton.tsx
+    MarkdownRenderer.tsx  # Markdown rendering component
   /screens
-    FeedScreen.jsx
-    BookmarksScreen.jsx
-    SettingsScreen.jsx
-    WeeklyRecapScreen.jsx
+    FeedScreen.tsx
+    BookmarksScreen.tsx
+    SettingsScreen.tsx
+    WeeklyRecapScreen.tsx
   /services
-    database.js          # SQLite operations
-    openrouter.js        # LLM API calls with parallel/sequential fallback
-    spacedRepetition.js  # Spaced repetition algorithm
-    feedAlgorithm.js     # Content distribution logic
+    database.ts          # SQLite operations
+    openrouter.ts        # LLM API calls with parallel/sequential fallback
+    spacedRepetition.ts  # Spaced repetition algorithm
+    feedAlgorithm.ts     # Content distribution logic
   /utils
-    personalities.js     # Personality definitions
-    i18n.js             # PT-BR/EN translations
+    personalities.ts     # Personality definitions
+    i18n.ts             # PT-BR/EN translations
+  /types
+    index.ts            # TypeScript type definitions
   /navigation
-    AppNavigator.jsx    # Bottom tabs navigation
+    AppNavigator.tsx    # Bottom tabs navigation
 ```
 
 ---
