@@ -1,5 +1,3 @@
-please search about the OpenAI sdk and Openrouter sdk to see how they actually work. also create openai_sdk.md and openrouter_sdk.md teaching how to use the apis.
-
 I want to create a new app in this repository. See bellow for all the details. I added specific suggestions for the database schema and directory organization. You dont necessarily have to follow them. Please make a good plan adressing everything to create the app. Follow the stack i asked for. The api keys and compatible endpoints must be setted on the settings page of the app and saved on the sqlite database, no .env. Keep a .env only for development to overwrite the settings so its easier for me to test.
 
 # **Educational Feed App - Complete Plan**
@@ -26,7 +24,7 @@ A Twitter-like educational app where AI personalities teach through posts and re
 - expo-sqlite (local SQLite)
 
 **API:**
-- OpenRouter SDK (OpenAI-compatible) + OpenRouter SDK
+- OpenRouter SDK (OpenAI-compatible)
 
 **Storage:**
 - AsyncStorage (user preferences)
